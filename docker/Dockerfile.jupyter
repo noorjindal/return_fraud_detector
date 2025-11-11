@@ -1,0 +1,30 @@
+FROM jupyter/scipy-notebook:latest
+
+# Set working directory
+WORKDIR /home/jovyan/work
+
+# Install additional Python packages
+RUN pip install --no-cache-dir \
+    lightgbm \
+    xgboost \
+    shap \
+    plotly \
+    seaborn \
+    fastapi \
+    uvicorn
+
+# Copy notebooks and data
+COPY notebooks/ ./notebooks/
+COPY data/ ./data/
+COPY models/ ./models/
+
+# Set permissions
+USER root
+RUN chown -R jovyan:users /home/jovyan/work
+USER jovyan
+
+# Expose port
+EXPOSE 8888
+
+# Start Jupyter
+CMD ["start-notebook.sh", "--NotebookApp.token=''", "--NotebookApp.password=''"]
