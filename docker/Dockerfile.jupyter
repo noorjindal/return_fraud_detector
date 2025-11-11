@@ -13,10 +13,11 @@ RUN pip install --no-cache-dir \
     fastapi \
     uvicorn
 
-# Copy notebooks and data
+# Copy notebooks (data and models are mounted via volumes in docker-compose)
 COPY notebooks/ ./notebooks/
-COPY data/ ./data/
-COPY models/ ./models/
+
+# Ensure directories exist
+RUN mkdir -p /home/jovyan/data /home/jovyan/models
 
 # Set permissions
 USER root
